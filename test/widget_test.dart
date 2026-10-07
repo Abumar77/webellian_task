@@ -4,7 +4,7 @@ import 'package:webellian_task/core/di/injection.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:webellian_task/features/authors/domain/author.dart';
 import 'package:webellian_task/features/authors/domain/author_repository.dart';
-import 'package:webellian_task/features/authors/presentation/pages/author_feature.dart';
+import 'package:webellian_task/features/authors/presentation/widgets/author_feature.dart';
 
 class FakeRepository implements AuthorRepository {
   @override
