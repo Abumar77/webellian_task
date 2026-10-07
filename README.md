@@ -92,7 +92,10 @@ The service can omit dates, top work, or first publication dates.
 ## Model code generation
 
 `Author`, `AuthorWork`, and `PageResult<T>` use Freezed for immutable models,
-value equality, and `copyWith`. API validation and mapping stay in the data layer.
+value equality, and `copyWith`. API validation and mapping stay in the data layer. Freezed DTOs use generated
+`fromJson`/`toJson` methods with Open Library field names and checked parsing.
+The repository maps DTOs to domain entities and translates malformed JSON into
+a typed failure.
 Generated `.freezed.dart` files are committed so a fresh checkout can run directly.
 After changing model definitions, regenerate them:
 
