@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import '../../domain/author.dart';
 import 'package:get_it/get_it.dart';
 import '../bloc/search/search_bloc.dart';
 import 'works_page.dart';
-import 'shared_widgets.dart';
+import '../widgets/message_view.dart';
+import '../widgets/page_footer.dart';
+import '../widgets/author_card.dart';
+import '../widgets/network_logs_button.dart';
 
 class SearchPage extends StatefulWidget {
   const SearchPage({super.key, required this.container});
@@ -23,7 +25,10 @@ class _SearchPageState extends State<SearchPage> {
 
   @override
   Widget build(BuildContext context) => Scaffold(
-    appBar: AppBar(title: const Text('Author Library')),
+    appBar: AppBar(
+      title: const Text('Author Library'),
+      actions: [NetworkLogsButton(container: widget.container)],
+    ),
     body: SafeArea(
       child: Center(
         child: ConstrainedBox(
@@ -44,6 +49,8 @@ class _SearchPageState extends State<SearchPage> {
                 const SizedBox(height: 24),
                 TextField(
                   controller: _controller,
+                  autocorrect: false,
+                  enableSuggestions: false,
                   onChanged: (query) =>
                       context.read<SearchBloc>().add(QueryChanged(query)),
                   textInputAction: TextInputAction.search,
@@ -109,7 +116,7 @@ class _SearchPageState extends State<SearchPage> {
                                               .read<SearchBloc>()
                                               .add(MoreAuthorsRequested()),
                                         )
-                                      : _AuthorCard(
+                                      : AuthorCard(
                                           author: state.authors[index],
                                           onTap: () =>
                                               Navigator.of(context).push(
@@ -133,52 +140,6 @@ class _SearchPageState extends State<SearchPage> {
               ],
             ),
           ),
-        ),
-      ),
-    ),
-  );
-}
-
-class _AuthorCard extends StatelessWidget {
-  const _AuthorCard({required this.author, required this.onTap});
-  final Author author;
-  final VoidCallback onTap;
-  @override
-  Widget build(BuildContext context) => Card(
-    margin: const EdgeInsets.only(bottom: 12),
-    child: InkWell(
-      onTap: onTap,
-      borderRadius: BorderRadius.circular(12),
-      child: Padding(
-        padding: const EdgeInsets.all(18),
-        child: Row(
-          children: [
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    author.name,
-                    style: Theme.of(context).textTheme.titleLarge,
-                  ),
-                  const SizedBox(height: 8),
-                  Text('Born: ${author.birthDate ?? "Unknown"}'),
-                  Text('Died: ${author.deathDate ?? "Not listed"}'),
-                  const SizedBox(height: 12),
-                  Text(
-                    'TOP WORK',
-                    style: Theme.of(context).textTheme.labelSmall,
-                  ),
-                  const SizedBox(height: 4),
-                  Text(
-                    author.topWork ?? 'Not listed',
-                    style: Theme.of(context).textTheme.bodyLarge,
-                  ),
-                ],
-              ),
-            ),
-            const Icon(Icons.chevron_right),
-          ],
         ),
       ),
     ),

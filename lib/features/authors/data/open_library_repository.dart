@@ -1,8 +1,7 @@
-import 'package:json_annotation/json_annotation.dart';
-import '../../../core/app_failure.dart';
+import 'package:flutter/foundation.dart';
 import '../domain/author.dart';
 import '../domain/author_repository.dart';
-import 'models/author_dto.dart';
+import 'parsing/author_response_parser.dart';
 import 'open_library_api.dart';
 
 class OpenLibraryRepository implements AuthorRepository {
@@ -11,15 +10,11 @@ class OpenLibraryRepository implements AuthorRepository {
 
   @override
   Future<PageResult<Author>> search(String query, {int offset = 0}) async {
-    final response = _decode(
-      await api.search(query, offset),
-      AuthorSearchResponseDto.fromJson,
-    );
-    return PageResult(
-      items: response.authors.map((author) => author.toDomain()).toList(),
-      total: response.total,
-      offset: offset,
-    );
+    final json = await api.search(query, offset);
+    return compute(AuthorResponseParser.parseAuthors, (
+      json,
+      offset,
+    ), debugLabel: 'parseAuthors');
   }
 
   @override
@@ -27,27 +22,10 @@ class OpenLibraryRepository implements AuthorRepository {
     String authorId, {
     int offset = 0,
   }) async {
-    final response = _decode(
-      await api.works(authorId, offset),
-      AuthorWorksResponseDto.fromJson,
-    );
-    return PageResult(
-      items: response.works.map((work) => work.toDomain()).toList(),
-      total: response.total,
-      offset: offset,
-    );
-  }
-
-  T _decode<T>(
-    Map<String, dynamic> json,
-    T Function(Map<String, dynamic>) fromJson,
-  ) {
-    try {
-      return fromJson(json);
-    } on CheckedFromJsonException {
-      throw const AppFailure(
-        'Open Library returned invalid records. Please retry.',
-      );
-    }
+    final json = await api.works(authorId, offset);
+    return compute(AuthorResponseParser.parseWorks, (
+      json,
+      offset,
+    ), debugLabel: 'parseAuthorWorks');
   }
 }

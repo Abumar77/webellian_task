@@ -3,7 +3,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../domain/author.dart';
 import 'package:get_it/get_it.dart';
 import '../bloc/works/works_bloc.dart';
-import 'shared_widgets.dart';
+import '../widgets/message_view.dart';
+import '../widgets/page_footer.dart';
 
 class WorksPage extends StatelessWidget {
   const WorksPage({super.key, required this.author, required this.container});

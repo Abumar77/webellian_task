@@ -1,5 +1,8 @@
 import 'dart:typed_data';
 import 'package:dio/dio.dart';
+import 'package:alice/alice.dart';
+import 'package:alice_dio/alice_dio_adapter.dart';
+import 'package:pretty_dio_logger/pretty_dio_logger.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:get_it/get_it.dart';
 import 'package:webellian_task/core/di/injection.dart';
@@ -32,6 +35,18 @@ void main() {
         isTrue,
       );
       expect(identical(container<DioClient>().dio, container<Dio>()), isTrue);
+      expect(
+        container<Dio>().interceptors.whereType<AliceDioAdapter>(),
+        hasLength(1),
+      );
+      expect(
+        container<Dio>().interceptors
+            .whereType<PrettyDioLogger>()
+            .single
+            .responseBody,
+        isFalse,
+      );
+      expect(container<Alice>().getNavigatorKey(), isNotNull);
       final first = container<SearchBloc>();
       final second = container<SearchBloc>();
       addTearDown(first.close);

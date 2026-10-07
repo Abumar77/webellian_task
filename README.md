@@ -8,7 +8,7 @@ the author is alive.
 ## Requirements
 
 - Flutter 3.44.9 or a compatible stable release with Dart >=3.12.2 <4.0.0
-- Android SDK and a device/emulator for Android
+- Android SDK 37 and a device/emulator for Android
 - macOS, Xcode, CocoaPods, and an iOS simulator/device for iOS
 - An internet connection. No API key or environment file is needed.
 
@@ -50,7 +50,8 @@ lib/
     presentation/
       bloc/search/                  SearchBloc, search_event.dart, search_state.dart
       bloc/works/                   WorksBloc, works_event.dart, works_state.dart
-      pages/                        Feature composition, screens and shared widgets
+      pages/                        Search and works screens
+      widgets/                      Feature provider, author card, message view, page footer
 ```
 
 Dependencies flow from presentation/data toward domain. The domain has no Flutter
@@ -74,6 +75,11 @@ may finish, but stale results are ignored. Empty input resets the screen. Each
 page fetches 20 records; explicit Load more controls avoid unbounded downloads.
 Pagination retains results on failure, supports retry, guards duplicate loads,
 and deduplicates records by API ID while advancing the raw server offset.
+
+Response DTO parsing and domain mapping run through `compute` in a background
+isolate on Android/iOS. Only the JSON map and page offset cross the isolate
+boundary; Dio and GetIt stay on the main isolate. Pagination keeps a disabled
+button with an inline spinner at a stable size while requests are pending.
 
 Dio has connection and receive timeouts. Network failures are translated to
 user-facing errors; malformed responses fail explicitly. Initial loading, empty,
@@ -157,3 +163,14 @@ Local Git Flow configuration uses `main`, `develop`, `feature/`, `release/`,
 `hotfix/`, `support/`, and the tag prefix `v`. The workflow works with standard
 Git commands; the optional git-flow CLI is not required. Clone users should use
 the branch conventions above or initialize their own local git-flow configuration.
+
+## Network debugging
+
+Debug builds attach Pretty Dio Logger and Alice to the shared Dio client.
+Pretty Dio Logger prints request headers, response status/timing, and errors
+to the Flutter console. Alice records response summaries by default to avoid
+synchronous formatting of large bodies on the UI isolate. To inspect full bodies,
+run `flutter run --dart-define=HTTP_BODY_LOGS=true`; this adds debug logging overhead. Tap the bug icon in the author search app bar to open
+Alice's HTTP inspector. Alice uses the app navigator key and retains the most
+recent 100 calls in memory. Notification and shake triggers are disabled.
+Interceptors and the inspector entry point are disabled in profile/release builds.
