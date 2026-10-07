@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../domain/author.dart';
 import 'package:get_it/get_it.dart';
-import '../bloc/search_bloc.dart';
+import '../bloc/search/search_bloc.dart';
 import 'works_page.dart';
 import 'shared_widgets.dart';
 

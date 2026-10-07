@@ -3,8 +3,8 @@ import 'package:get_it/get_it.dart';
 import '../../features/authors/data/open_library_api.dart';
 import '../../features/authors/data/open_library_repository.dart';
 import '../../features/authors/domain/author_repository.dart';
-import '../../features/authors/presentation/bloc/search_bloc.dart';
-import '../../features/authors/presentation/bloc/works_bloc.dart';
+import '../../features/authors/presentation/bloc/search/search_bloc.dart';
+import '../../features/authors/presentation/bloc/works/works_bloc.dart';
 import '../network/dio_client.dart';
 
 final getIt = GetIt.instance;

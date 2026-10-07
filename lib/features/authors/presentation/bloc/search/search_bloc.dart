@@ -1,59 +1,12 @@
 import 'dart:async';
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import '../../../../core/app_failure.dart';
-import '../../domain/author.dart';
-import '../../domain/author_repository.dart';
+import '../../../../../core/app_failure.dart';
+import '../../../domain/author.dart';
+import '../../../domain/author_repository.dart';
 
-sealed class SearchEvent {}
-
-final class QueryChanged extends SearchEvent {
-  QueryChanged(this.query);
-  final String query;
-}
-
-final class SearchRetried extends SearchEvent {}
-
-final class MoreAuthorsRequested extends SearchEvent {}
-
-final class _SearchRequested extends SearchEvent {
-  _SearchRequested(this.revision);
-  final int revision;
-}
-
-enum SearchStatus { initial, loading, success, failure }
-
-class SearchState extends Equatable {
-  const SearchState({
-    this.query = '',
-    this.status = SearchStatus.initial,
-    this.authors = const [],
-    this.total = 0,
-    this.nextOffset = 0,
-    this.hasMore = false,
-    this.loadingMore = false,
-    this.error,
-  });
-  final String query;
-  final SearchStatus status;
-  final List<Author> authors;
-  final int total;
-  final int nextOffset;
-  final bool hasMore;
-  final bool loadingMore;
-  final String? error;
-  @override
-  List<Object?> get props => [
-    query,
-    status,
-    authors,
-    total,
-    nextOffset,
-    hasMore,
-    loadingMore,
-    error,
-  ];
-}
+part 'search_event.dart';
+part 'search_state.dart';
 
 class SearchBloc extends Bloc<SearchEvent, SearchState> {
   SearchBloc(

@@ -48,7 +48,8 @@ lib/
     domain/                         Immutable entities, repository contract, use cases
     data/                           Dio API client, validation and entity mapping
     presentation/
-      bloc/                         SearchBloc and WorksBloc, events and states
+      bloc/search/                  SearchBloc, search_event.dart, search_state.dart
+      bloc/works/                   WorksBloc, works_event.dart, works_state.dart
       pages/                        Feature composition, screens and shared widgets
 ```
 

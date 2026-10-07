@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../domain/author.dart';
 import 'package:get_it/get_it.dart';
-import '../bloc/works_bloc.dart';
+import '../bloc/works/works_bloc.dart';
 import 'shared_widgets.dart';
 
 class WorksPage extends StatelessWidget {

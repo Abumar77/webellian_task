@@ -3,8 +3,8 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:webellian_task/core/app_failure.dart';
 import 'package:webellian_task/features/authors/domain/author.dart';
 import 'package:webellian_task/features/authors/domain/author_repository.dart';
-import 'package:webellian_task/features/authors/presentation/bloc/search_bloc.dart';
-import 'package:webellian_task/features/authors/presentation/bloc/works_bloc.dart';
+import 'package:webellian_task/features/authors/presentation/bloc/search/search_bloc.dart';
+import 'package:webellian_task/features/authors/presentation/bloc/works/works_bloc.dart';
 
 class ControlledRepository implements AuthorRepository {
   final queries = <String>[];

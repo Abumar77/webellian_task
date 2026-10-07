@@ -5,8 +5,8 @@ import 'package:get_it/get_it.dart';
 import 'package:webellian_task/core/di/injection.dart';
 import 'package:webellian_task/core/network/dio_client.dart';
 import 'package:webellian_task/features/authors/domain/author_repository.dart';
-import 'package:webellian_task/features/authors/presentation/bloc/search_bloc.dart';
-import 'package:webellian_task/features/authors/presentation/bloc/works_bloc.dart';
+import 'package:webellian_task/features/authors/presentation/bloc/search/search_bloc.dart';
+import 'package:webellian_task/features/authors/presentation/bloc/works/works_bloc.dart';
 
 class TrackingAdapter implements HttpClientAdapter {
   bool closed = false;

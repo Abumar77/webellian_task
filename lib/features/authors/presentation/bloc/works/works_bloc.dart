@@ -1,43 +1,11 @@
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import '../../../../core/app_failure.dart';
-import '../../domain/author.dart';
-import '../../domain/author_repository.dart';
+import '../../../../../core/app_failure.dart';
+import '../../../domain/author.dart';
+import '../../../domain/author_repository.dart';
 
-sealed class WorksEvent {}
-
-final class WorksRequested extends WorksEvent {}
-
-final class MoreWorksRequested extends WorksEvent {}
-
-class WorksState extends Equatable {
-  const WorksState({
-    this.works = const [],
-    this.loading = false,
-    this.loaded = false,
-    this.hasMore = false,
-    this.nextOffset = 0,
-    this.total = 0,
-    this.error,
-  });
-  final List<AuthorWork> works;
-  final bool loading;
-  final bool loaded;
-  final bool hasMore;
-  final int nextOffset;
-  final int total;
-  final String? error;
-  @override
-  List<Object?> get props => [
-    works,
-    loading,
-    loaded,
-    hasMore,
-    nextOffset,
-    total,
-    error,
-  ];
-}
+part 'works_event.dart';
+part 'works_state.dart';
 
 class WorksBloc extends Bloc<WorksEvent, WorksState> {
   WorksBloc(this.getWorks, this.authorId) : super(const WorksState()) {
