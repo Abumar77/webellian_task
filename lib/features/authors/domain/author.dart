@@ -1,46 +1,37 @@
-import 'package:equatable/equatable.dart';
+import 'package:freezed_annotation/freezed_annotation.dart';
 
-class Author extends Equatable {
-  const Author({
-    required this.id,
-    required this.name,
-    this.birthDate,
-    this.deathDate,
-    this.topWork,
-  });
-  final String id;
-  final String name;
-  final String? birthDate;
-  final String? deathDate;
-  final String? topWork;
+part 'author.freezed.dart';
 
-  @override
-  List<Object?> get props => [id, name, birthDate, deathDate, topWork];
+@freezed
+abstract class Author with _$Author {
+  const factory Author({
+    required String id,
+    required String name,
+    String? birthDate,
+    String? deathDate,
+    String? topWork,
+  }) = _Author;
 }
 
-class AuthorWork extends Equatable {
-  const AuthorWork({
-    required this.id,
-    required this.title,
-    this.firstPublishDate,
-  });
-  final String id;
-  final String title;
-  final String? firstPublishDate;
-
-  @override
-  List<Object?> get props => [id, title, firstPublishDate];
+@freezed
+abstract class AuthorWork with _$AuthorWork {
+  const factory AuthorWork({
+    required String id,
+    required String title,
+    String? firstPublishDate,
+  }) = _AuthorWork;
 }
 
-class PageResult<T> {
-  PageResult({
+@freezed
+abstract class PageResult<T> with _$PageResult<T> {
+  const PageResult._();
+
+  const factory PageResult({
     required List<T> items,
-    required this.total,
-    required this.offset,
-  }) : items = List.unmodifiable(items);
-  final List<T> items;
-  final int total;
-  final int offset;
+    required int total,
+    required int offset,
+  }) = _PageResult<T>;
+
   int get nextOffset => offset + items.length;
   bool get hasMore => items.isNotEmpty && nextOffset < total;
 }

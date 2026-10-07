@@ -83,6 +83,18 @@ Dates are preserved as API strings because records use varying date formats.
 Top work is the value supplied by Open Library, rather than a calculated ranking.
 The service can omit dates, top work, or first publication dates.
 
+## Model code generation
+
+`Author`, `AuthorWork`, and `PageResult<T>` use Freezed for immutable models,
+value equality, and `copyWith`. API validation and mapping stay in the data layer.
+Generated `.freezed.dart` files are committed so a fresh checkout can run directly.
+After changing model definitions, regenerate them:
+
+```sh
+dart run build_runner build
+dart format lib test
+```
+
 ## Validation
 
 ```sh
