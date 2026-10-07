@@ -1,7 +1,7 @@
 part of 'works_bloc.dart';
 
-sealed class WorksEvent {}
-
-final class WorksRequested extends WorksEvent {}
-
-final class MoreWorksRequested extends WorksEvent {}
+@freezed
+sealed class WorksEvent with _$WorksEvent {
+  const factory WorksEvent.requested() = WorksRequested;
+  const factory WorksEvent.moreRequested() = MoreWorksRequested;
+}

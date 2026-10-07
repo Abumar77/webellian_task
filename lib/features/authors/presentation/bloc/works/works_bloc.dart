@@ -1,4 +1,4 @@
-import 'package:equatable/equatable.dart';
+import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../../../core/app_failure.dart';
 import '../../../domain/author.dart';
@@ -6,6 +6,7 @@ import '../../../domain/author_repository.dart';
 
 part 'works_event.dart';
 part 'works_state.dart';
+part 'works_bloc.freezed.dart';
 
 class WorksBloc extends Bloc<WorksEvent, WorksState> {
   WorksBloc(this.getWorks, this.authorId) : super(const WorksState()) {
