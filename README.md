@@ -122,3 +122,33 @@ git push -u origin main
 
 Create an empty GitHub or Bitbucket repository first and authenticate with your
 Git host. Use its repository URL as the submission link.
+
+## Git Flow
+
+`main` holds released code. `develop` is the integration branch. Start new work
+on `feature/<name>` from `develop`, then merge it back through a pull request.
+Do not commit feature work directly to `main`.
+
+```sh
+git switch develop
+git pull --ff-only origin develop
+git switch -c feature/author-search
+# Implement and validate the change, then commit it.
+git push -u origin feature/author-search
+```
+
+Open a pull request targeting `develop`. Prefer a merge commit to preserve the
+feature branch history. Delete the feature branch after merging.
+
+For a release, branch `release/<version>` from `develop`. Complete release fixes,
+then merge the release into both `main` and `develop`, using `--no-ff`. Tag the
+release commit on `main` as `v<version>` and push the branches and tag.
+
+For an urgent production fix, branch `hotfix/<version>` from `main`. Merge the
+fix into both `main` and `develop`, tag the patched release, and push it. If a
+release branch is active, apply the fix there as well.
+
+Local Git Flow configuration uses `main`, `develop`, `feature/`, `release/`,
+`hotfix/`, `support/`, and the tag prefix `v`. The workflow works with standard
+Git commands; the optional git-flow CLI is not required. Clone users should use
+the branch conventions above or initialize their own local git-flow configuration.
