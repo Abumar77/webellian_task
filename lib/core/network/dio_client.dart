@@ -1,5 +1,6 @@
 import 'package:dio/dio.dart';
 import '../app_failure.dart';
+import 'api_endpoints.dart';
 
 class DioClient {
   const DioClient(this.dio);
@@ -7,7 +8,7 @@ class DioClient {
 
   static Dio createDio() => Dio(
     BaseOptions(
-      baseUrl: 'https://openlibrary.org',
+      baseUrl: ApiEndpoints.baseUrl,
       connectTimeout: const Duration(seconds: 10),
       sendTimeout: const Duration(seconds: 10),
       receiveTimeout: const Duration(seconds: 15),

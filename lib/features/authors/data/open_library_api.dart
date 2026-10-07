@@ -1,4 +1,5 @@
 import '../../../core/network/dio_client.dart';
+import '../../../core/network/api_endpoints.dart';
 
 class OpenLibraryApi {
   const OpenLibraryApi(this.client);
@@ -6,14 +7,14 @@ class OpenLibraryApi {
   static const pageSize = 20;
 
   Future<Map<String, dynamic>> search(String query, int offset) =>
-      client.getJson('/search/authors.json', {
+      client.getJson(ApiEndpoints.searchAuthors, {
         'q': query,
         'limit': pageSize,
         'offset': offset,
       });
 
   Future<Map<String, dynamic>> works(String id, int offset) => client.getJson(
-    '/authors/${Uri.encodeComponent(id)}/works.json',
+    ApiEndpoints.authorWorks(id),
     {'limit': pageSize, 'offset': offset},
   );
 }
