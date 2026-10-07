@@ -10,6 +10,8 @@ class AuthorLibraryApp extends StatelessWidget {
     title: 'Author Library',
     debugShowCheckedModeBanner: false,
     theme: AppTheme.light,
+    darkTheme: AppTheme.dark,
+    themeMode: ThemeMode.system,
     home: const AuthorFeature(),
   );
 }

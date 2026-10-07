@@ -11,4 +11,23 @@ abstract final class AppTheme {
     ),
     useMaterial3: true,
   );
+
+  static final ThemeData dark = _darkTheme();
+
+  static ThemeData _darkTheme() {
+    final colorScheme = ColorScheme.fromSeed(
+      seedColor: const Color(0xFF265D54),
+      brightness: Brightness.dark,
+    );
+    return ThemeData(
+      colorScheme: colorScheme,
+      scaffoldBackgroundColor: colorScheme.surface,
+      inputDecorationTheme: InputDecorationTheme(
+        filled: true,
+        fillColor: colorScheme.surfaceContainerHighest,
+        border: const OutlineInputBorder(),
+      ),
+      useMaterial3: true,
+    );
+  }
 }
