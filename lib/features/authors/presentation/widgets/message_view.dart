@@ -29,33 +29,3 @@ class MessageView extends StatelessWidget {
     ),
   );
 }
-
-class PageFooter extends StatelessWidget {
-  const PageFooter({
-    super.key,
-    required this.loading,
-    required this.hasMore,
-    required this.onMore,
-    this.error,
-  });
-  final bool loading;
-  final bool hasMore;
-  final VoidCallback onMore;
-  final String? error;
-  @override
-  Widget build(BuildContext context) => Padding(
-    padding: const EdgeInsets.symmetric(vertical: 16),
-    child: Column(
-      children: [
-        if (error != null) Text(error!, textAlign: TextAlign.center),
-        if (loading)
-          const CircularProgressIndicator()
-        else if (hasMore)
-          OutlinedButton(
-            onPressed: onMore,
-            child: Text(error == null ? 'Load more' : 'Retry loading more'),
-          ),
-      ],
-    ),
-  );
-}

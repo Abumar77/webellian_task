@@ -2,8 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../domain/author.dart';
 import 'package:get_it/get_it.dart';
-import '../bloc/works_bloc.dart';
-import 'shared_widgets.dart';
+import '../bloc/works/works_bloc.dart';
+import '../widgets/message_view.dart';
+import '../widgets/page_footer.dart';
 
 class WorksPage extends StatelessWidget {
   const WorksPage({super.key, required this.author, required this.container});
@@ -12,7 +13,8 @@ class WorksPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => BlocProvider(
-    create: (_) => container<WorksBloc>(param1: author.id)..add(WorksRequested()),
+    create: (_) =>
+        container<WorksBloc>(param1: author.id)..add(WorksRequested()),
     child: Scaffold(
       appBar: AppBar(title: Text(author.name)),
       body: SafeArea(
@@ -27,12 +29,15 @@ class WorksPage extends StatelessWidget {
                 if (state.error != null && !state.loaded) {
                   return MessageView(
                     message: state.error!,
-                    onRetry: () => context.read<WorksBloc>().add(WorksRequested()),
+                    onRetry: () =>
+                        context.read<WorksBloc>().add(WorksRequested()),
                   );
                 }
                 if (!state.loaded) return const SizedBox.shrink();
                 if (state.works.isEmpty) {
-                  return const MessageView(message: 'No works listed for this author.');
+                  return const MessageView(
+                    message: 'No works listed for this author.',
+                  );
                 }
                 return ListView.builder(
                   padding: const EdgeInsets.all(20),
@@ -41,7 +46,10 @@ class WorksPage extends StatelessWidget {
                     if (index == 0) {
                       return Padding(
                         padding: const EdgeInsets.only(bottom: 16),
-                        child: Text('${state.total} works', style: Theme.of(context).textTheme.headlineSmall),
+                        child: Text(
+                          '${state.total} works',
+                          style: Theme.of(context).textTheme.headlineSmall,
+                        ),
                       );
                     }
                     if (index == state.works.length + 1) {
@@ -49,7 +57,8 @@ class WorksPage extends StatelessWidget {
                         loading: state.loading,
                         hasMore: state.hasMore,
                         error: state.error,
-                        onMore: () => context.read<WorksBloc>().add(MoreWorksRequested()),
+                        onMore: () =>
+                            context.read<WorksBloc>().add(MoreWorksRequested()),
                       );
                     }
                     final work = state.works[index - 1];
@@ -57,7 +66,9 @@ class WorksPage extends StatelessWidget {
                       child: ListTile(
                         leading: const Icon(Icons.menu_book_outlined),
                         title: Text(work.title),
-                        subtitle: Text('First published: ${work.firstPublishDate ?? "Not listed"}'),
+                        subtitle: Text(
+                          'First published: ${work.firstPublishDate ?? "Not listed"}',
+                        ),
                       ),
                     );
                   },

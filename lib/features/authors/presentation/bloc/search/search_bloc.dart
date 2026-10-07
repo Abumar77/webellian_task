@@ -1,59 +1,13 @@
 import 'dart:async';
-import 'package:equatable/equatable.dart';
+import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import '../../../../core/app_failure.dart';
-import '../../domain/author.dart';
-import '../../domain/author_repository.dart';
+import '../../../../../core/app_failure.dart';
+import '../../../domain/author.dart';
+import '../../../domain/author_repository.dart';
 
-sealed class SearchEvent {}
-
-final class QueryChanged extends SearchEvent {
-  QueryChanged(this.query);
-  final String query;
-}
-
-final class SearchRetried extends SearchEvent {}
-
-final class MoreAuthorsRequested extends SearchEvent {}
-
-final class _SearchRequested extends SearchEvent {
-  _SearchRequested(this.revision);
-  final int revision;
-}
-
-enum SearchStatus { initial, loading, success, failure }
-
-class SearchState extends Equatable {
-  const SearchState({
-    this.query = '',
-    this.status = SearchStatus.initial,
-    this.authors = const [],
-    this.total = 0,
-    this.nextOffset = 0,
-    this.hasMore = false,
-    this.loadingMore = false,
-    this.error,
-  });
-  final String query;
-  final SearchStatus status;
-  final List<Author> authors;
-  final int total;
-  final int nextOffset;
-  final bool hasMore;
-  final bool loadingMore;
-  final String? error;
-  @override
-  List<Object?> get props => [
-    query,
-    status,
-    authors,
-    total,
-    nextOffset,
-    hasMore,
-    loadingMore,
-    error,
-  ];
-}
+part 'search_event.dart';
+part 'search_state.dart';
+part 'search_bloc.freezed.dart';
 
 class SearchBloc extends Bloc<SearchEvent, SearchState> {
   SearchBloc(
@@ -130,7 +84,7 @@ class SearchBloc extends Bloc<SearchEvent, SearchState> {
       return;
     }
     final revision = _revision;
-    emit(_copy(previous, loadingMore: true));
+    emit(previous.copyWith(loadingMore: true, error: null));
     try {
       final page = await searchAuthors(
         previous.query,
@@ -153,24 +107,10 @@ class SearchBloc extends Bloc<SearchEvent, SearchState> {
       );
     } catch (error) {
       if (revision != _revision || emit.isDone) return;
-      emit(_copy(previous, error: _message(error)));
+      emit(previous.copyWith(loadingMore: false, error: _message(error)));
     }
   }
 
-  SearchState _copy(
-    SearchState old, {
-    bool loadingMore = false,
-    String? error,
-  }) => SearchState(
-    query: old.query,
-    status: old.status,
-    authors: old.authors,
-    total: old.total,
-    nextOffset: old.nextOffset,
-    hasMore: old.hasMore,
-    loadingMore: loadingMore,
-    error: error,
-  );
   String _message(Object error) => error is AppFailure
       ? error.message
       : 'Something went wrong. Please retry.';
