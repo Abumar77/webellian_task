@@ -1,7 +1,6 @@
 import 'package:dio/dio.dart';
 import '../app_failure.dart';
 
-/// Shared transport policy; feature APIs supply paths and parameters.
 class DioClient {
   const DioClient(this.dio);
   final Dio dio;

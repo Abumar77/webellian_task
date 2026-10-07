@@ -9,30 +9,16 @@ import '../network/dio_client.dart';
 
 final getIt = GetIt.instance;
 
-/// Register once at startup. Supply an isolated container and repository in tests.
 void configureDependencies({GetIt? container, AuthorRepository? repository}) {
   final locator = container ?? getIt;
-  locator.registerLazySingleton<Dio>(
-    DioClient.createDio,
-    dispose: (dio) => dio.close(force: true),
-  );
+  locator.registerLazySingleton<Dio>(DioClient.createDio, dispose: (dio) => dio.close(force: true));
   locator.registerLazySingleton<DioClient>(() => DioClient(locator<Dio>()));
-  locator.registerLazySingleton<OpenLibraryApi>(
-    () => OpenLibraryApi(locator<DioClient>()),
-  );
-  locator.registerLazySingleton<AuthorRepository>(
-    () => repository ?? OpenLibraryRepository(locator<OpenLibraryApi>()),
-  );
-  locator.registerLazySingleton<SearchAuthors>(
-    () => SearchAuthors(locator<AuthorRepository>()),
-  );
-  locator.registerLazySingleton<GetAuthorWorks>(
-    () => GetAuthorWorks(locator<AuthorRepository>()),
-  );
-  // Blocs must be factories: each widget provider owns and closes its instance.
-  locator.registerFactory<SearchBloc>(
-    () => SearchBloc(locator<SearchAuthors>()),
-  );
+  locator.registerLazySingleton<OpenLibraryApi>(() => OpenLibraryApi(locator<DioClient>()));
+  locator.registerLazySingleton<AuthorRepository>(() => repository ?? OpenLibraryRepository(locator<OpenLibraryApi>()));
+  locator.registerLazySingleton<SearchAuthors>(() => SearchAuthors(locator<AuthorRepository>()));
+  locator.registerLazySingleton<GetAuthorWorks>(() => GetAuthorWorks(locator<AuthorRepository>()));
+  
+  locator.registerFactory<SearchBloc>(() => SearchBloc(locator<SearchAuthors>()));
   locator.registerFactoryParam<WorksBloc, String, void>(
     (authorId, _) => WorksBloc(locator<GetAuthorWorks>(), authorId),
   );
