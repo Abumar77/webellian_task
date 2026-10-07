@@ -1,18 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../domain/author.dart';
-import '../../domain/author_repository.dart';
+import 'package:get_it/get_it.dart';
 import '../bloc/works_bloc.dart';
 import 'shared_widgets.dart';
 
 class WorksPage extends StatelessWidget {
-  const WorksPage({super.key, required this.author, required this.repository});
+  const WorksPage({super.key, required this.author, required this.container});
   final Author author;
-  final AuthorRepository repository;
+  final GetIt container;
   @override
   Widget build(BuildContext context) => BlocProvider(
     create: (_) =>
-        WorksBloc(GetAuthorWorks(repository), author.id)..add(WorksRequested()),
+        container<WorksBloc>(param1: author.id)..add(WorksRequested()),
     child: Scaffold(
       appBar: AppBar(title: Text(author.name)),
       body: SafeArea(

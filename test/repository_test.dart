@@ -1,6 +1,7 @@
 import 'dart:typed_data';
 import 'dart:convert';
 import 'package:dio/dio.dart';
+import 'package:webellian_task/core/network/dio_client.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:webellian_task/core/app_failure.dart';
 import 'package:webellian_task/features/authors/data/open_library_api.dart';
@@ -47,7 +48,7 @@ void main() {
       });
       final dio = Dio()..httpClientAdapter = adapter;
       addTearDown(dio.close);
-      final repository = OpenLibraryRepository(OpenLibraryApi(dio));
+      final repository = OpenLibraryRepository(OpenLibraryApi(DioClient(dio)));
       final page = await repository.search('Jane & John', offset: 20);
       expect(page.items.single.id, 'OL1A');
       expect(page.items.single.birthDate, isNull);
@@ -70,7 +71,9 @@ void main() {
     });
     final dio = Dio()..httpClientAdapter = adapter;
     addTearDown(dio.close);
-    final page = await OpenLibraryRepository(OpenLibraryApi(dio)).works('OL1A');
+    final page = await OpenLibraryRepository(
+      OpenLibraryApi(DioClient(dio)),
+    ).works('OL1A');
     expect(adapter.request!.path, '/authors/OL1A/works.json');
     expect(page.hasMore, isTrue);
     expect(page.nextOffset, 1);
@@ -87,7 +90,7 @@ void main() {
       });
     addTearDown(dio.close);
     expect(
-      OpenLibraryRepository(OpenLibraryApi(dio)).search('Jane'),
+      OpenLibraryRepository(OpenLibraryApi(DioClient(dio))).search('Jane'),
       throwsA(isA<AppFailure>()),
     );
   });

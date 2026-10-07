@@ -53,12 +53,18 @@ lib/
 ```
 
 Dependencies flow from presentation/data toward domain. The domain has no Flutter
-or Dio dependency. `AuthorFeature` is the composition root and owns its Dio client.
-It creates `SearchBloc` through a widget-level `BlocProvider`; `WorksPage` creates
-its own route-level `BlocProvider`. There are no Bloc providers in `main` or the
-application widget. Providers close their Blocs automatically; the feature closes
-its Dio client and search closes its debounce timer. Tests can inject a repository
-into `AuthorFeature` without HTTP or a global service locator.
+or Dio dependency. `core/di/injection.dart` registers dependencies through GetIt
+at startup: a shared Dio instance, DioClient, API, repository, and use cases are
+lazy singletons. DioClient centralizes timeouts, headers, response validation,
+and network error mapping. Resetting the container disposes Dio.
+
+Blocs are factories, including a parameterized WorksBloc factory for the author ID.
+`AuthorFeature` resolves SearchBloc inside its widget-level BlocProvider;
+`WorksPage` resolves WorksBloc inside its route-level BlocProvider. Providers own
+and close their Blocs. Main initializes dependencies but contains no Bloc providers.
+Repository and use-case constructors retain explicit injection; GetIt resolution
+stays in the registration module and provider widgets. Tests use an isolated
+GetIt container with a fake repository, then reset it after each test.
 
 Search uses a 400 ms debounce. Each query change immediately advances a request
 revision, so a slow earlier response cannot replace the current search, including

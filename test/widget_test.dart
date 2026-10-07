@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:get_it/get_it.dart';
+import 'package:webellian_task/core/di/injection.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:webellian_task/features/authors/domain/author.dart';
 import 'package:webellian_task/features/authors/domain/author_repository.dart';
@@ -35,8 +37,11 @@ void main() {
   testWidgets('search displays author details and opens their works', (
     tester,
   ) async {
+    final container = GetIt.asNewInstance();
+    configureDependencies(container: container, repository: FakeRepository());
+    addTearDown(container.reset);
     await tester.pumpWidget(
-      MaterialApp(home: AuthorFeature(repository: FakeRepository())),
+      MaterialApp(home: AuthorFeature(container: container)),
     );
     await tester.enterText(find.byType(TextField), 'Jane');
     await tester.pump();

@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../domain/author.dart';
-import '../../domain/author_repository.dart';
+import 'package:get_it/get_it.dart';
 import '../bloc/search_bloc.dart';
 import 'works_page.dart';
 import 'shared_widgets.dart';
 
 class SearchPage extends StatefulWidget {
-  const SearchPage({super.key, required this.repository});
-  final AuthorRepository repository;
+  const SearchPage({super.key, required this.container});
+  final GetIt container;
   @override
   State<SearchPage> createState() => _SearchPageState();
 }
@@ -117,8 +117,7 @@ class _SearchPageState extends State<SearchPage> {
                                                   builder: (_) => WorksPage(
                                                     author:
                                                         state.authors[index],
-                                                    repository:
-                                                        widget.repository,
+                                                    container: widget.container,
                                                   ),
                                                 ),
                                               ),
